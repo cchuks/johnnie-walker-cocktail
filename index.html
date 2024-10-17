@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Johnnie Walker Cocktail Quiz</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Helvetica Neue', sans-serif;
+            background-image: url('https://www.magnushealthcare.co.uk/wp-content/uploads/2024/10/BackgroundImage2.jpg');
+            background-size: cover;
+            background-position: center;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            padding-top: 20px;
+        }
+
+        .logo {
+            position: absolute;
+            top: 50px;
+            display: flex;
+            justify-content: center;
+            width: 100%;
+            z-index: 1;
+        }
+
+        .logo img {
+            width: 300px;
+        }
+
+        .container {
+            background: rgba(252, 185, 19, 0.9);
+            width: 100%;
+            max-width: 800px;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        h1 {
+            color: #000;
+            font-size: 28px;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .question {
+            font-size: 18px;
+            margin-bottom: 20px;
+        }
+
+        .options {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+        }
+
+        .options label {
+            display: block;
+            flex: 0 1 48%;
+            margin-bottom: 15px;
+            padding: 15px;
+            background-color: #fff;
+            border: 2px solid transparent;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .options label:hover {
+            background-color: #000;
+            color: #fff;
+        }
+
+        input[type="radio"] {
+            display: none;
+        }
+
+        input[type="radio"]:checked + label {
+            border-color: #d89e40;
+            box-shadow: 0px 0px 15px rgba(216, 158, 64, 0.5);
+            background-color: #000;
+            color: #fff;
+        }
+
+        button {
+            background-color: #000000;
+            color: #fff;
+            padding: 15px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: background-color 0.3s ease;
+            width: 100%;
+            margin-top: 20px;
+        }
+
+        button:hover {
+            background-color: #b97d2e;
+        }
+
+        .cocktail-result {
+            display: none;
+            text-align: center;
+            padding-top: 20px;
+        }
+
+        .queue-number {
+            font-size: 24px;
+            margin-top: 20px;
+            color: #000;
+        }
+
+        .color-tag {
+            font-weight: bold;
+            color: black;
+        }
+
+        .color-tag img {
+            width: 50px;
+            height: 50px;
+            display: inline-block;
+            vertical-align: middle;
+            margin-left: 10px;
+        }
+
+        a {
+            text-decoration: underline;
+            color: black;
+            font-weight: bold;
+            transition: color 0.3s ease;
+        }
+
+        a:hover {
+            color: #b97d2e;
+        }
+
+        /* Mobile Styles */
+        @media (max-width: 768px) {
+            body {
+                padding: 20px;
+                padding-top: 100px;
+            }
+
+            h1 {
+                font-size: 24px;
+            }
+
+            .container {
+                padding: 15px;
+            }
+
+            .options label {
+                flex: 0 1 100%;
+                font-size: 14px;
+                padding: 12px;
+            }
+
+            button {
+                padding: 12px;
+                font-size: 14px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 20px;
+            }
+
+            .container {
+                padding: 10px;
+            }
+
+            .options label {
+                font-size: 12px;
+            }
+
+            button {
+                padding: 10px;
+                font-size: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Johnnie Walker Logo -->
+    <div class="logo">
+        <img src="https://www.johnniewalker.com/_next/static/media/header-logo.c677900c.svg" alt="Johnnie Walker Logo">
+    </div>
+
+    <!-- Main Container -->
+    <div class="container">
+        <!-- Quiz Title -->
+        <h1>Which Cocktail Suits You?</h1>
+
+        <!-- Question and Options -->
+        <div class="question">
+            <p>What’s your ideal way to spend a Friday night?</p>
+            <br>
+            <form id="quiz-form">
+                <div class="options">
+                    <input type="radio" id="citrusy" name="personality" value="citrusy">
+                    <label for="citrusy">Partying with friends in a vibrant bar.</label>
+                    <input type="radio" id="fresh" name="personality" value="fresh">
+                    <label for="fresh">Relaxing in nature or a quiet spot.</label>
+                    <input type="radio" id="spicy" name="personality" value="spicy">
+                    <label for="spicy">Trying something adventurous and bold.</label>
+                    <input type="radio" id="sour" name="personality" value="sour">
+                    <label for="sour">Having a low-key dinner with close ones.</label>
+                </div>
+                <button type="button" id="submit-button" onclick="submitQuiz()">Submit</button>
+            </form>
+        </div>
+
+        <!-- Result -->
+        <div class="cocktail-result">
+            <h2>Your Cocktail is: <span id="cocktail-name"></span></h2>
+            <p id="cocktail-description"></p>
+            <div class="queue-number">
+                Queue Number: <span id="queue-number"></span>
+            </div>
+            <p>Approach the JW cutie for your tag. Your color is <span class="color-tag" id="tag-color"></span>.</p>
+            <a href="https://www.magnushealthcare.co.uk/wp-content/uploads/2024/10/JW-Cocktail-Week-Menu.pdf" download>Download the Cocktail Menu</a>
+        </div>
+    </div>
+
+    <script>
+    let quizSubmitted = false; // Track if quiz has been submitted
+
+    // Function to fetch the last queue number from the Google Sheet
+    async function getLastQueueNumber() {
+        const url = 'https://script.google.com/macros/s/AKfycbyBaUEu60ZsJRC5t2fAXS6iJYylmqyChQVtYM0PsyWhNsp8S4yY4S2GdRHtHIZ0qmN_Jw/exec'; // Replace with your web app URL
+        
+        try {
+            const response = await fetch(url);
+            const data = await response.json(); // Assuming your GAS returns JSON with a `lastRow` field
+            
+            console.log('Fetched last row number:', data.lastRow);
+            
+            // Ensure data is valid
+            if (typeof data.lastRow === 'number') {
+                return data.lastRow; // Return the last row number as the queue number
+            } else {
+                console.error('Invalid row number received:', data.lastRow);
+                return 0;
+            }
+        } catch (error) {
+            console.error('Error fetching last queue number:', error);
+            return 0;
+        }
+    }
+
+    async function submitQuiz() {
+    if (quizSubmitted) return; // Prevent multiple submissions
+
+    const form = document.getElementById('quiz-form');
+    const selectedValue = form.personality.value;
+
+    const resultData = {
+        citrusy: {
+            name: 'Johnnie Walker Whiskey Smash',
+            description: 'You’re vibrant and love to keep things light! A Whiskey Smash is refreshing, just like your energy.',
+            tagColor: 'Orange',
+            colorImage: 'https://www.magnushealthcare.co.uk/wp-content/uploads/2024/10/OrangeTag.png'
+        },
+        fresh: {
+            name: 'Johnnie Walker Vanilla Julep',
+            description: 'You’re all about staying calm and cool. A Julep suits your fresh and relaxed personality.',
+            tagColor: 'Green',
+            colorImage: 'https://www.magnushealthcare.co.uk/wp-content/uploads/2024/10/GreenTag.png'
+        },
+        spicy: {
+            name: 'Johnnie Walker Southside',
+            description: 'Bold and adventurous, the Southside is for you! Spicy, just like your daring nature.',
+            tagColor: 'Red',
+            colorImage: 'https://www.magnushealthcare.co.uk/wp-content/uploads/2024/10/RedTag.png'
+        },
+        sour: {
+            name: 'Johnnie Walker Whiskey Sour',
+            description: 'You like to keep it balanced and grounded. A Whiskey Sour reflects your classic and thoughtful style.',
+            tagColor: 'White',
+            colorImage: 'https://www.magnushealthcare.co.uk/wp-content/uploads/2024/10/WhiteTag.png'
+        }
+    };
+
+    const result = resultData[selectedValue];
+
+    if (result) {
+        // Fetch the last queue number before displaying or submitting
+        const queueNumber = await submitToGoogleSheet(result.name, result.tagColor); // Get the last row number as queue number
+
+        document.getElementById('cocktail-name').textContent = result.name;
+        document.getElementById('cocktail-description').textContent = result.description;
+        document.getElementById('tag-color').innerHTML = result.tagColor + `<img src="${result.colorImage}" alt="${result.tagColor}">`;
+        document.getElementById('queue-number').textContent = queueNumber; // Set the queue number to the last row number
+
+        // Display result section
+        document.querySelector('.cocktail-result').style.display = 'block';
+        quizSubmitted = true; // Mark the quiz as submitted
+    }
+}
+
+    async function submitToGoogleSheet(cocktail, tagColor) {
+    const url = 'https://script.google.com/macros/s/AKfycbyBaUEu60ZsJRC5t2fAXS6iJYylmqyChQVtYM0PsyWhNsp8S4yY4S2GdRHtHIZ0qmN_Jw/exec'; // Replace with your doPost web app URL
+
+    // Prepare form data
+    const formData = new FormData();
+    formData.append('cocktail', cocktail);
+    formData.append('tagColor', tagColor);
+
+    // Send data via POST request
+    try {
+        const response = await fetch(url, {
+            method: 'POST',
+            body: formData
+        });
+
+        if (response.ok) {
+            const data = await response.json(); // Get the JSON response
+            console.log('Data submitted successfully:', data);
+            return data.lastRow; // Return the last row number from the response
+        } else {
+            console.error('Error submitting data');
+        }
+    } catch (error) {
+        console.error('Network error:', error);
+    }
+    
+    return 0; // Return 0 if submission fails
+}
+    </script>
+
+</body>
+</html>
